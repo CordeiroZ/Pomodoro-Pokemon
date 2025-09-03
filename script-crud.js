@@ -12,6 +12,11 @@ const ulTarefas = document.querySelector('.app__section-task-list')
 // Cria um array vazio chamado tarefas que vai armazenar todas as tarefas adicionadas
 const tarefas = JSON.parse(localStorage.getItem('tarefas')) || []
 
+
+function atualizarTarefas () {
+    localStorage.setItem('tarefas', JSON.stringify(tarefas)) // Salva o array tarefas no localStorage do navegador, transformando ele em uma string JSON
+}
+ 
 function criarElementoTarefa (tarefa) {
     const li = document.createElement('li')
     li.classList.add('app__section-task-list-item')
@@ -27,7 +32,17 @@ function criarElementoTarefa (tarefa) {
     paragrafo.textContent = tarefa.descricao
     paragrafo.classList.add('app__section-task-list-item-description')
 
+
+
     const botao = document.createElement('button')
+
+     botao.onclick = () => {
+        const novaDescricao = prompt("Qual é o novo nome da tarefa?")
+        paragrafo.textContent = novaDescricao
+        tarefa.descricao = novaDescricao
+        atualizarTarefas()
+    }
+
     const imagemBotao = document.createElement('img')
     imagemBotao.setAttribute('src' , '/imagens/edit.png')
     botao.classList.add('.app_button-edit')
@@ -59,7 +74,7 @@ formAdicionarTarefa.addEventListener('submit', (evento) => {
     tarefas.push(tarefa) // Adiciona o objeto tarefa ao array tarefas
     const elementoTarefa = criarElementoTarefa(tarefa)
     ulTarefas.append(elementoTarefa)
-    localStorage.setItem('tarefas', JSON.stringify(tarefas)) // Salva o array tarefas no localStorage do navegador, transformando ele em uma string JSON
+    atualizarTarefas() 
     textarea.value = ''
     formAdicionarTarefa.classList.add('hidden')
 })
